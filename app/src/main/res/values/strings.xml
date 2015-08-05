@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Python EasyDocs</string>
+    <string name="hello_world">Hello World</string>
+
+    <string name="drawer_item_about">About</string>
+    <string name="drawer_item_contact">Contact</string>
+    <string name="drawer_item_open_source">Open Source</string>
+    <string name="drawer_item_settings">Settings</string>
+
+    <string name="drawer_header_doc_parts">Parts of the Documentation</string>
+    <string name="drawer_item_whats_new">What\'s New in Python 3.4?</string>
+    <string name="drawer_item_tutorial">Tutorial</string>
+    <string name="drawer_item_lib_ref">Library Reference</string>
+    <string name="drawer_item_lang_ref">Language Reference</string>
+    <string name="drawer_item_setup_usage">Python Setup and Usage</string>
+    <string name="drawer_item_howtos">Python HOWTOs</string>
+    <string name="drawer_item_install_modules">Installing Python Modules</string>
+    <string name="drawer_item_distrib_modules">Distributing Python Modules</string>
+    <string name="drawer_item_extend_embed">Extending and Embedding</string>
+    <string name="drawer_item_python_c_api">Python/C API</string>
+    <string name="drawer_item_faqs">FAQs</string>
+
+    <string name="drawer_header_indices_tables">Indices and Tables</string>
+    <string name="drawer_item_global_module_ind">Global Module Index</string>
+    <string name="drawer_item_gen_ind">General Index</string>
+    <string name="drawer_item_glossary">Glossary</string>
+    <string name="drawer_item_table_contents">Complete Table of Contents</string>
+
+    <string name="drawer_header_meta_info">Meta Information</string>
+    <string name="drawer_item_report_bugs">Reporting Bugs</string>
+    <string name="drawer_item_about_doc">About the Documentation</string>
+    <string name="drawer_item_history_license">History and License of Python</string>
+    <string name="drawer_item_copyright">Copyright</string>
+</resources>
