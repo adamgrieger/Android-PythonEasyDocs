@@ -15,7 +15,7 @@ public class PythonDocument {
 
         switch (v) {
             case "3.4.3":
-                releaseDate = "February 25th, 2015";
+                releaseDate = "February 25, 2015";
                 urlHTML = "https://docs.python.org/ftp/python/doc/3.4.3/python-3.4.3-docs-html.zip";
                 urlPDF = "https://docs.python.org/ftp/python/doc/3.4.3/python-3.4.3-docs-pdf-letter.zip";
                 urlTXT = "https://docs.python.org/ftp/python/doc/3.4.3/python-3.4.3-docs-text.zip";
@@ -24,7 +24,7 @@ public class PythonDocument {
                 sizeTXT = "2 MB";
                 break;
             case "3.3.6":
-                releaseDate = "October 11th, 2014";
+                releaseDate = "October 11, 2014";
                 urlHTML = "http://docs.python.org/ftp/python/doc/3.3.6/python-3.3.6-docs-html.zip";
                 urlPDF = "http://docs.python.org/ftp/python/doc/3.3.6/python-3.3.6-docs-pdf-letter.zip";
                 urlTXT = "http://docs.python.org/ftp/python/doc/3.3.6/python-3.3.6-docs-text.zip";
@@ -33,7 +33,7 @@ public class PythonDocument {
                 sizeTXT = "2 MB";
                 break;
             case "2.7.10":
-                releaseDate = "May 23rd, 2015";
+                releaseDate = "May 23, 2015";
                 urlHTML = "https://docs.python.org/2.7/archives/python-2.7.10-docs-html.zip";
                 urlPDF = "https://docs.python.org/2.7/archives/python-2.7.10-docs-pdf-letter.zip";
                 urlTXT = "https://docs.python.org/2.7/archives/python-2.7.10-docs-text.zip";
