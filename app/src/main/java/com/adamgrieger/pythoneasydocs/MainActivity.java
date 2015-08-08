@@ -1,16 +1,12 @@
 package com.adamgrieger.pythoneasydocs;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.Drawer;
@@ -25,47 +21,23 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.mikepenz.materialdrawer.util.KeyboardUtil;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
 
 public class MainActivity extends AppCompatActivity {
+
     private static final int ADD_DOCS_ID = 1;
     private static final int MANAGE_DOCS_ID = 2;
-
-    private static final String TAG = "MainActivity";
-    
-    private Context context = getApplicationContext();
 
     private AccountHeader mAccountHeader = null;
     private Drawer mDrawer = null;
 
-    private String[] supportedVersions = {
-            "3.4.3",
-            "3.3.6",
-            "2.7.10"
-    };
-
-    private ArrayList<PythonDocument> availableDocs;
-    private ArrayList<PythonDocument> downloadedDocs;
-
-    private File availableJSON = new File(context.getFilesDir(), "available_docs.json");
-    private File downloadedJSON = new File(context.getFilesDir(), "downloaded_docs.json");
+    private JSONParser jParse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (availableJSON.exists() && downloadedJSON.exists()) {
-            loadJSONFiles();
-        } else {
-            createNewJSONFiles();
-        }
+        jParse = new JSONParser(getApplicationContext());
 
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -76,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 .withHeaderBackground(R.drawable.header)
                 .withProfileImagesClickable(false)
                 .addProfiles(
-                        new ProfileSettingDrawerItem().withName("Add Documentation").withIdentifier(ADD_DOCS_ID).withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).sizeDp(12).colorRes(R.color.material_drawer_dark_primary_text)).withIdentifier(ADD_DOCS_ID),
+                        new ProfileSettingDrawerItem().withName("Add Documentation").withIdentifier(ADD_DOCS_ID).withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBarSize().paddingDp(5).colorRes(R.color.material_drawer_primary_icon)).withIdentifier(ADD_DOCS_ID),
                         new ProfileSettingDrawerItem().withName("Manage Documentation").withIdentifier(MANAGE_DOCS_ID).withIcon(GoogleMaterial.Icon.gmd_settings)
                 )
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -171,82 +143,6 @@ public class MainActivity extends AppCompatActivity {
             mDrawer.closeDrawer();
         } else {
             super.onBackPressed();
-        }
-    }
-
-    public void createNewJSONFiles() {
-        deleteJSONFiles();
-
-        try {
-            if (availableJSON.createNewFile()) {
-                Log.i(TAG, "available_docs.json has been created");
-            }
-
-            if (downloadedJSON.createNewFile()) {
-                Log.i(TAG, "downloaded_docs.json has been created");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (String version : supportedVersions) {
-            availableDocs.add(new PythonDocument(version));
-        }
-
-        Gson gson = new Gson();
-        FileOutputStream outputStream;
-
-        try {
-            outputStream = context.openFileOutput("available_docs.json", Context.MODE_PRIVATE);
-            outputStream.write(gson.toJson(availableDocs).getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteJSONFiles() {
-        if (availableJSON.delete()) {
-            Log.i(TAG, "available_docs.json has been deleted");
-        } else {
-            Log.i(TAG, "available_docs.json cannot be deleted, because it does not exist");
-        }
-
-        if (downloadedJSON.delete()) {
-            Log.i(TAG, "downloaded_docs.json has been deleted");
-        } else {
-            Log.i(TAG, "downloaded_docs.json cannot be deleted, because it does not exist");
-        }
-    }
-
-    public void loadJSONFiles() {
-        Gson gson = new Gson();
-
-        try {
-            availableDocs = gson.fromJson(new BufferedReader(new FileReader(availableJSON)), new TypeToken<ArrayList<PythonDocument>>(){}.getType());
-            downloadedDocs = gson.fromJson(new BufferedReader(new FileReader(downloadedJSON)), new TypeToken<ArrayList<PythonDocument>>(){}.getType());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void updateJSONFiles() {
-        deleteJSONFiles();
-
-        try {
-            FileOutputStream outputStream = context.openFileOutput("available_docs.json", Context.MODE_PRIVATE);
-            outputStream.write(new Gson().toJson(availableDocs).getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            FileOutputStream outputStream = context.openFileOutput("downloaded_docs.json", Context.MODE_PRIVATE);
-            outputStream.write(new Gson().toJson(downloadedDocs).getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
