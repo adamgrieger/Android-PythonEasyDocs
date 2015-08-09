@@ -21,10 +21,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile('com.mikepenz:materialdrawer:3.1.2@aar') {
+    compile('com.mikepenz:materialdrawer:4.0.0.rc6-SNAPSHOT@aar') {
         transitive = true
     }
     compile 'com.mikepenz:iconics:1.6.2@aar'
+    compile 'com.mikepenz:octicons-typeface:2.2.1@aar'
     compile 'io.karim:materialtabs:2.0.2'
     compile 'com.google.code.gson:gson:2.3.1'
 }
