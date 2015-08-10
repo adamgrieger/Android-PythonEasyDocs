@@ -1,10 +1,12 @@
 package com.adamgrieger.pythoneasydocs;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CompoundButton;
 
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -13,12 +15,11 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
@@ -50,6 +51,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Drawable expanderIconMore = new IconicsDrawable(getApplicationContext(), GoogleMaterial.Icon.gmd_expand_more).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_icon);
+        final Drawable expanderIconLess = new IconicsDrawable(getApplicationContext(), GoogleMaterial.Icon.gmd_expand_less).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_icon);
+
+        final Drawable profileHTMLBlue = new IconicsDrawable(getApplicationContext(), FontAwesome.Icon.faw_file_code_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_light_blue_500).colorRes(R.color.material_drawer_dark_primary_text);
+        final Drawable profilePDFBlue = new IconicsDrawable(getApplicationContext(), FontAwesome.Icon.faw_file_pdf_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_light_blue_500).colorRes(R.color.material_drawer_dark_primary_text);
+        final Drawable profileTXTBlue = new IconicsDrawable(getApplicationContext(), FontAwesome.Icon.faw_file_text_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_light_blue_500).colorRes(R.color.material_drawer_dark_primary_text);
+
+        final Drawable profileHTMLYellow = new IconicsDrawable(getApplicationContext(), FontAwesome.Icon.faw_file_code_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_yellow_500).colorRes(R.color.material_drawer_dark_primary_text);
+        final Drawable profilePDFYellow = new IconicsDrawable(getApplicationContext(), FontAwesome.Icon.faw_file_pdf_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_yellow_500).colorRes(R.color.material_drawer_dark_primary_text);
+        final Drawable profileTXTYellow = new IconicsDrawable(getApplicationContext(), FontAwesome.Icon.faw_file_text_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_yellow_500).colorRes(R.color.material_drawer_dark_primary_text);
+
         jParse = new JSONParser(getApplicationContext());
 
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 .withCompactStyle(true)
                 .withHeaderBackground(R.drawable.header)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Python 3.4.3").withNameShown(true).withEmail("February 25th, 2015")
-                                .withIcon(new IconicsDrawable(this, FontAwesome.Icon.faw_file_pdf_o).actionBar().paddingDp(5).backgroundColorRes(R.color.md_light_blue_500).colorRes(R.color.material_drawer_dark_primary_text)),
+                        new ProfileDrawerItem().withName("Python 3.4.3").withNameShown(true).withEmail("February 25th, 2015").withIcon(profileHTMLBlue),
                         new ProfileSettingDrawerItem().withName("Add Documentation").withIcon(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_add).actionBar().paddingDp(5).colorRes(R.color.material_drawer_primary_icon)),
                         new ProfileSettingDrawerItem().withName("Manage Documentation").withIcon(GoogleMaterial.Icon.gmd_settings)
                 )
@@ -85,25 +96,27 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(mToolbar)
                 .withAccountHeader(mAccountHeader)
                 .withCloseOnClick(false)
+                .withSelectedItem(-1)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName(R.string.drawer_header_doc_parts).withIcon(GoogleMaterial.Icon.gmd_library_books).withIdentifier(PARTS_DOCUMENTATION_ID),
-                        new PrimaryDrawerItem().withName(R.string.drawer_header_indices_tables).withIcon(GoogleMaterial.Icon.gmd_apps).withIdentifier(INDICES_TABLES_ID),
-                        new PrimaryDrawerItem().withName(R.string.drawer_header_meta_info).withIcon(GoogleMaterial.Icon.gmd_info).withIdentifier(META_INFORMATION_ID),
+                        new ExpandableDrawerItem().withName(R.string.drawer_header_doc_parts).withSelectable(false).withIcon(GoogleMaterial.Icon.gmd_library_books).withIdentifier(PARTS_DOCUMENTATION_ID).withExpanderIcon(expanderIconMore),
+                        new ExpandableDrawerItem().withName(R.string.drawer_header_indices_tables).withSelectable(false).withIcon(GoogleMaterial.Icon.gmd_apps).withIdentifier(INDICES_TABLES_ID).withExpanderIcon(expanderIconMore),
+                        new ExpandableDrawerItem().withName(R.string.drawer_header_meta_info).withSelectable(false).withIcon(GoogleMaterial.Icon.gmd_info).withIdentifier(META_INFORMATION_ID).withExpanderIcon(expanderIconMore),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName("Contact").withIcon(FontAwesome.Icon.faw_contao),
                         new SecondaryDrawerItem().withName("Open Source").withIcon(Octicons.Icon.oct_octoface),
                         new SecondaryDrawerItem().withName("Help").withIcon(GoogleMaterial.Icon.gmd_help),
-                        new SwitchDrawerItem().withName("Dark Mode").withIcon(GoogleMaterial.Icon.gmd_brightness_low).withTextColorRes(R.color.material_drawer_secondary_text)
-                )
+                        new SwitchDrawerItem().withName("Dark Mode").withIcon(GoogleMaterial.Icon.gmd_brightness_low).withTextColorRes(R.color.material_drawer_secondary_text))
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem instanceof PrimaryDrawerItem) {
+                        if (drawerItem instanceof ExpandableDrawerItem) {
                             if (drawerItem.getIdentifier() == PARTS_DOCUMENTATION_ID && !isFirstGroupExpanded) {
                                 isFirstGroupExpanded = true;
                                 ArrayList<IDrawerItem> drawerItems = new ArrayList<>();
                                 drawerItems.addAll(mDrawer.getDrawerItems());
                                 int drawerItemIndex = drawerItems.indexOf(drawerItem);
+
+                                mDrawer.updateItem(((ExpandableDrawerItem) drawerItem).withExpanderIcon(expanderIconLess));
 
                                 drawerItems.add(drawerItemIndex + 1, new SecondaryDrawerItem().withName(R.string.drawer_item_whats_new));
                                 drawerItems.add(drawerItemIndex + 2, new SecondaryDrawerItem().withName(R.string.drawer_item_tutorial));
@@ -125,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
                                 drawerItems.addAll(mDrawer.getDrawerItems());
                                 int drawerItemIndex = drawerItems.indexOf(drawerItem);
 
+                                mDrawer.updateItem(((ExpandableDrawerItem) drawerItem).withExpanderIcon(expanderIconMore));
+
                                 for (int i = 0; i < 12; i++) {
                                     drawerItems.remove(drawerItemIndex + 1);
                                 }
@@ -135,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
                                 ArrayList<IDrawerItem> drawerItems = new ArrayList<>();
                                 drawerItems.addAll(mDrawer.getDrawerItems());
                                 int drawerItemIndex = drawerItems.indexOf(drawerItem);
+
+                                mDrawer.updateItem(((ExpandableDrawerItem) drawerItem).withExpanderIcon(expanderIconLess));
 
                                 drawerItems.add(drawerItemIndex + 1, new SecondaryDrawerItem().withName(R.string.drawer_item_global_module_ind));
                                 drawerItems.add(drawerItemIndex + 2, new SecondaryDrawerItem().withName(R.string.drawer_item_gen_ind));
@@ -149,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
                                 drawerItems.addAll(mDrawer.getDrawerItems());
                                 int drawerItemIndex = drawerItems.indexOf(drawerItem);
 
+                                mDrawer.updateItem(((ExpandableDrawerItem) drawerItem).withExpanderIcon(expanderIconMore));
+
                                 for (int i = 0; i < 5; i++) {
                                     drawerItems.remove(drawerItemIndex + 1);
                                 }
@@ -159,6 +178,8 @@ public class MainActivity extends AppCompatActivity {
                                 ArrayList<IDrawerItem> drawerItems = new ArrayList<>();
                                 drawerItems.addAll(mDrawer.getDrawerItems());
                                 int drawerItemIndex = drawerItems.indexOf(drawerItem);
+
+                                mDrawer.updateItem(((ExpandableDrawerItem) drawerItem).withExpanderIcon(expanderIconLess));
 
                                 drawerItems.add(drawerItemIndex + 1, new SecondaryDrawerItem().withName(R.string.drawer_item_report_bugs));
                                 drawerItems.add(drawerItemIndex + 2, new SecondaryDrawerItem().withName(R.string.drawer_item_about_doc));
@@ -171,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
                                 ArrayList<IDrawerItem> drawerItems = new ArrayList<>();
                                 drawerItems.addAll(mDrawer.getDrawerItems());
                                 int drawerItemIndex = drawerItems.indexOf(drawerItem);
+
+                                mDrawer.updateItem(((ExpandableDrawerItem) drawerItem).withExpanderIcon(expanderIconMore));
 
                                 for (int i = 0; i < 4; i++) {
                                     drawerItems.remove(drawerItemIndex + 1);
